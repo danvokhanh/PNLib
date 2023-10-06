@@ -3,16 +3,27 @@ package com.example.pnlib.model;
 public class Sach {
     private int MaSach;
     private String TenSach;
-    private int GiaThue,MaLoai;
+    private int GiaThue;
+
+    private int MaLoai;
+    private String TenLoai;
+    private int SoLanMuon;
 
     public Sach() {
     }
 
-    public Sach(int maSach, String tenSach, int giaThue, int maLoai) {
+    public Sach(int maSach, String tenSach, int giaThue, int maLoai, String tenLoai) {
         MaSach = maSach;
         TenSach = tenSach;
         GiaThue = giaThue;
         MaLoai = maLoai;
+        TenLoai = tenLoai;
+    }
+
+    public Sach(int maSach, String tenSach, int soLanMuon) {
+        MaSach = maSach;
+        TenSach = tenSach;
+        SoLanMuon = soLanMuon;
     }
 
     public int getMaSach() {
@@ -45,5 +56,21 @@ public class Sach {
 
     public void setMaLoai(int maLoai) {
         MaLoai = maLoai;
+    }
+
+    public int getSoLanMuon() {
+        return SoLanMuon;
+    }
+
+    public void setSoLanMuon(int soLanMuon) {
+        SoLanMuon = soLanMuon;
+    }
+
+    public String getTenLoai() {
+        return TenLoai;
+    }
+
+    public void setTenLoai(String tenLoai) {
+        TenLoai = tenLoai;
     }
 }

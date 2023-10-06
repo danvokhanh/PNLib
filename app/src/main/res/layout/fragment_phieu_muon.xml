@@ -10,11 +10,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:id="@+id/lv_PM"/>
+            android:id="@+id/rcv_PM"/>
     </LinearLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

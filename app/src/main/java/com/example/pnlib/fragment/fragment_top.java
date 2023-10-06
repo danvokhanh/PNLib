@@ -1,66 +1,42 @@
 package com.example.pnlib.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.pnlib.R;
+import com.example.pnlib.adapter.adapter_Top10;
+import com.example.pnlib.dao.ThongKeDao;
+import com.example.pnlib.model.Sach;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link fragment_top#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
 public class fragment_top extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     public fragment_top() {
         // Required empty public constructor
     }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment fragment_top.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static fragment_top newInstance(String param1, String param2) {
-        fragment_top fragment = new fragment_top();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
-
+    @SuppressLint("MissingInflatedId")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_top, container, false);
+        View view = inflater.inflate(R.layout.fragment_top, container, false);
+        RecyclerView rcv = view.findViewById(R.id.rcv_Top);
+
+        ThongKeDao thongKeDao = new ThongKeDao(getContext());
+        ArrayList<Sach> list = thongKeDao.getTop10();
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        rcv.setLayoutManager(layoutManager);
+        adapter_Top10 adapter = new adapter_Top10(getContext(),list);
+        rcv.setAdapter(adapter);
+
+        return view;
     }
 }

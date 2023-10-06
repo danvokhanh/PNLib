@@ -6,10 +6,10 @@ public class ThuThu {
     public ThuThu() {
     }
 
-    public ThuThu(String maTT, String matKhau, String hoTen) {
+    public ThuThu(String maTT, String hoTen, String matKhau) {
         MaTT = maTT;
-        MatKhau = matKhau;
         HoTen = hoTen;
+        MatKhau = matKhau;
     }
 
     public String getMaTT() {

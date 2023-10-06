@@ -17,62 +17,71 @@ public class PhieuMuonDao {
         dbHelper = new DbHelper(context);
     }
 
-    public ArrayList<PhieuMuon> selectAll(){
+    public ArrayList<PhieuMuon> getDSPhieuMuon(){
         ArrayList<PhieuMuon> list = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try{
-            Cursor cursor = db.rawQuery("select * from PhieuMuon",null);
-            if(cursor.getCount() > 0){
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()){
-                    PhieuMuon pm = new PhieuMuon();
-                    pm.setMaPM(cursor.getInt(0));
-                    pm.setMaTV(cursor.getInt(1));
-                    pm.setMaTT(cursor.getString(2));
-                    pm.setMaSach(cursor.getInt(3));
-                    pm.setNgay(cursor.getString(4));
-                    pm.setTienThue(cursor.getInt(5));
-                    pm.setTraSach(cursor.getInt(6));
-                    list.add(pm);
-                    cursor.moveToNext();
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+        Cursor cursor = db.rawQuery("SELECT pm.MaPM, tv.HoTen, sc.TenSach, pm.TienThue, pm.TraSach, pm.Ngay  From PhieuMuon pm, ThanhVien tv, Sach sc, ThuThu tt where pm.MaTV = tv.MaTV and pm.MaSach = sc.MaSach and pm.MaTT = tt.MaTT ORDER BY pm.MaPM DESC",null);
+        if(cursor.getCount() != 0){
+            cursor.moveToFirst();
+            do {
+                list.add(new PhieuMuon(cursor.getInt(0),cursor.getString(1),cursor.getString(2), cursor.getInt(3), cursor.getInt(4),cursor.getString(5)));
+            }while (cursor.moveToNext());
         }
         return list;
     }
-    public boolean insert(PhieuMuon pm){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put("MaPM",pm.getMaPM());
-        values.put("MaTV",pm.getMaTV());
-        values.put("MaTT",pm.getMaTT());
-        values.put("MaSach",pm.getMaSach());
-        values.put("Ngay",pm.getNgay());
-        values.put("TienThue",pm.getTienThue());
-        values.put("TraSach",pm.getTraSach());
-        long data = db.insert("PhieuMuon",null,values);
-        return (data > 0);
-    }
 
-    public boolean update(PhieuMuon pm){
+    public boolean update(int mapm, int matv, int masach, int chkcheck){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("MaPM",pm.getMaPM());
-        values.put("MaTV",pm.getMaTV());
-        values.put("MaTT",pm.getMaTT());
-        values.put("MaSach",pm.getMaSach());
-        values.put("Ngay",pm.getNgay());
-        values.put("TienThue",pm.getTienThue());
-        values.put("TraSach",pm.getTraSach());
-        long data = db.update("PhieuMuon",values,"MaPM = ?",new String[]{String.valueOf(pm.getMaPM())});
-        return (data > 0);
+        values.put("MaTV", matv);
+        values.put("MaSach",masach);
+        values.put("TraSach",chkcheck);
+
+        long check = db.update("PhieuMuon",values,"MaPM = ?",new String[]{String.valueOf(mapm)});
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 
     public boolean delete(int id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long data = db.delete("PhieuMuon","MaPM = ?",new String[]{String.valueOf(id)});
-        return (data > 0);
+        long check = db.delete("PhieuMuon","MaPM = ?",new String[]{String.valueOf(id)});
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public boolean updateTrangThai(int mapm){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("TraSach",1);
+        long check = db.update("PhieuMuon",values,"MaPM = ?",new String[]{String.valueOf(mapm)});
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
+    public boolean insert(PhieuMuon pm){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("MaTT",pm.getMaTT());
+        values.put("MaTV", pm.getMaTV());
+        values.put("MaSach",pm.getMaSach());
+        values.put("TienThue",pm.getTienThue());
+        values.put("TraSach",pm.getTrangThai());
+        values.put("Ngay",pm.getNgayThue());
+
+        long check = db.insert("PhieuMuon",null,values);
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

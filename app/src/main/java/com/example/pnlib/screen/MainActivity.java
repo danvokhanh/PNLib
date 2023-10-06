@@ -15,12 +15,17 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.example.pnlib.R;
 import com.example.pnlib.dao.SachDao;
+import com.example.pnlib.dao.ThuThuDao;
 import com.example.pnlib.fragment.fragment_add_user;
 import com.example.pnlib.fragment.fragment_change_pass;
 import com.example.pnlib.fragment.fragment_doanh_thu;
@@ -29,6 +34,7 @@ import com.example.pnlib.fragment.fragment_phieu_muon;
 import com.example.pnlib.fragment.fragment_sach;
 import com.example.pnlib.fragment.fragment_thanh_vien;
 import com.example.pnlib.fragment.fragment_top;
+import com.google.android.material.navigation.NavigationBarMenu;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
@@ -50,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,drawerLayout,toolbar,R.string.open,R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
+        NavigationUser();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -104,6 +111,20 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
+
+    public void NavigationUser(){
+        NavigationView nv = findViewById(R.id.navigationView);
+        View headerView = nv.getHeaderView(0);
+        TextView tvUser = headerView.findViewById(R.id.NameUser);
+        // lấy tên người dùng từ Intent
+        Intent i = getIntent();
+        String matt = i.getStringExtra("MaTT");
+        tvUser.setText("Welcome" + matt);
+        // điều hướng
+        if(matt.equals("Admin")){
+            nv.getMenu().findItem(R.id.menuTND).setVisible(true);
+        }
     }
 
     public void relaceFrg(Fragment frg){

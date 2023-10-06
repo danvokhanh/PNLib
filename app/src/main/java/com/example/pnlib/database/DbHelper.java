@@ -9,7 +9,7 @@ import androidx.annotation.Nullable;
 public class DbHelper extends SQLiteOpenHelper {
 
     static final String dbName = "PhuongNamLib";
-    static final int dbVersion = 1;
+    static final int dbVersion = 14;
 
     public DbHelper(@Nullable Context context) {
         super(context, dbName, null, dbVersion);
@@ -19,7 +19,7 @@ public class DbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         // Tạo bảng thủ thư
         String tb_ThuThu = "create table ThuThu(" +
-                "MaTT text primary key not null," +
+                "MaTT text primary key," +
                 "HoTen text not null," +
                 "MatKhau text not null)";
         db.execSQL(tb_ThuThu);
@@ -42,31 +42,29 @@ public class DbHelper extends SQLiteOpenHelper {
                 "MaSach integer primary key autoincrement," +
                 "TenSach text not null," +
                 "GiaThue integer not null," +
-                "MaLoai integer references LoaiSach(MaLoai) not null)";
+                "MaLoai integer references LoaiSach(MaLoai))";
         db.execSQL(tb_Sach);
 
         // Tạo bảng phiếu mượn
         String tb_PhieuMuon = "create table PhieuMuon(" +
                 "MaPM integer primary key autoincrement," +
-                "MaTT text references ThuThu(MaTT) not null," +
-                "MaTV integer references ThanhVien(MaTV) not null," +
-                "MaSach integer references Sach(MaSach) not null," +
-                "Ngay Date not null," +
-                "TraSach integer not null)";
+                "MaTT text references ThuThu(MaTT)," +
+                "MaTV integer references ThanhVien(MaTV)," +
+                "MaSach integer references Sach(MaSach)," +
+                "TienThue integer not null," +
+                "TraSach integer not null," +
+                "Ngay text not null)";
         db.execSQL(tb_PhieuMuon);
 
         //data mẫu
-        // data loại sách
-        db.execSQL("insert into LoaiSach values(1,'Lập Trình')," +
-                "(2,'Thiết Kế Đồ Họa')," +
-                "(3,'Maketing')");
-        // data sách
-        db.execSQL("insert into Sach values(1,'Lập Trình Java',35000,1)," +
-                "(2,'Nhập Môn Thiết Kế Đồ Họa',25000,2)," +
-                "(3,'Maketing cơ bản',30000,3)");
-        // data thủ thư
-        db.execSQL("insert into ThuThu values('Kina','Nguyễn Thiên Thiên','nkoxloveqcno123')");
-        //data thành viên
+        db.execSQL("INSERT INTO LoaiSach VALUES (1, 'Thiếu nhi'),(2,'Tình cảm'),(3, 'Giáo khoa')");
+        db.execSQL("INSERT INTO Sach VALUES (1, 'Hãy đợi đấy', 2500, 1), (2, 'Thằng cuội', 1000, 1), (3, 'Lập trình Android', 2000, 3)");
+        db.execSQL("INSERT INTO ThuThu VALUES ('Admin','Nguyễn Văn Anh','1234'),('thuthu02','Trần Văn Hùng','123abc')");
+        db.execSQL("INSERT INTO ThanhVien VALUES (1,'Cao Thu Trang','2000'),(2,'Trần Mỹ Kim','2000')");
+        //trả sách: 1: đã trả - 0: chưa trả
+        db.execSQL("INSERT INTO PhieuMuon VALUES (1,'thuthu02',1, 1, 2500, 1, '19/03/2022')," +
+                "(2,'thuthu02',1, 3, 2000, 0, '19/03/2022')," +
+                "(3,'thuthu02',2, 1, 2000, 1, '19/03/2022')");
 
     }
 

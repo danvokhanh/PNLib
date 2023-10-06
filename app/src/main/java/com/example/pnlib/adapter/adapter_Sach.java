@@ -205,7 +205,7 @@ public class adapter_Sach extends RecyclerView.Adapter<adapter_Sach.ViewHolder>{
             @Override
             public void onClick(View view) {
                 String tensach = ed_TenSach.getText().toString();
-                String checktien = ed_GiaThue.getText().toString();;
+                String checktien = ed_GiaThue.getText().toString();
                 HashMap<String, Object> hs = (HashMap<String, Object>) spnSach.getSelectedItem();
                 int maloai = (int) hs.get("MaLoai");
 

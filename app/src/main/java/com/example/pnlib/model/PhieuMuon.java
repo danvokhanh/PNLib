@@ -1,23 +1,55 @@
 package com.example.pnlib.model;
 
 public class PhieuMuon {
-    private int MaPM,MaTV;
+    private int MaPM;
     private String MaTT;
+    private int MaTV;
     private int MaSach;
-    private String Ngay;
-    private int TienThue,TraSach;
+    private int TienThue, TrangThai;
+    private String NgayThue;
+    private String HoTenTV, TenSach;
+
 
     public PhieuMuon() {
     }
 
-    public PhieuMuon(int maPM, int maTV, String maTT, int maSach, String ngay, int tienThue, int traSach) {
+
+    public PhieuMuon(int maTV,int maSach, int tienThue, int trangThai, String ngayThue) {
+        MaTV = maTV;
+        MaSach = maSach;
+        TienThue = tienThue;
+        TrangThai = trangThai;
+        NgayThue = ngayThue;
+    }
+
+    public PhieuMuon(String maTT, int maTV, int maSach, int tienThue, int trangThai, String ngayThue) {
+        MaTT = maTT;
+        MaTV = maTV;
+        MaSach = maSach;
+        TienThue = tienThue;
+        TrangThai = trangThai;
+        NgayThue = ngayThue;
+    }
+
+    public PhieuMuon(int maPM, String hoTenTV, String tenSach, int tienThue, int trangThai, String ngayThue, int maTV, String maTT, int maSach) {
         MaPM = maPM;
+        HoTenTV = hoTenTV;
+        TenSach = tenSach;
+        TienThue = tienThue;
+        TrangThai = trangThai;
+        NgayThue = ngayThue;
         MaTV = maTV;
         MaTT = maTT;
         MaSach = maSach;
-        Ngay = ngay;
+    }
+
+    public PhieuMuon(int maPM, String hoTenTV, String tenSach, int tienThue, int trangThai, String ngayThue) {
+        MaPM = maPM;
+        HoTenTV = hoTenTV;
+        TenSach = tenSach;
         TienThue = tienThue;
-        TraSach = traSach;
+        TrangThai = trangThai;
+        NgayThue = ngayThue;
     }
 
     public int getMaPM() {
@@ -26,6 +58,46 @@ public class PhieuMuon {
 
     public void setMaPM(int maPM) {
         MaPM = maPM;
+    }
+
+    public String getHoTenTV() {
+        return HoTenTV;
+    }
+
+    public void setHoTenTV(String hoTenTV) {
+        HoTenTV = hoTenTV;
+    }
+
+    public String getTenSach() {
+        return TenSach;
+    }
+
+    public void setTenSach(String tenSach) {
+        TenSach = tenSach;
+    }
+
+    public int getTienThue() {
+        return TienThue;
+    }
+
+    public void setTienThue(int tienThue) {
+        TienThue = tienThue;
+    }
+
+    public int getTrangThai() {
+        return TrangThai;
+    }
+
+    public void setTrangThai(int trangThai) {
+        TrangThai = trangThai;
+    }
+
+    public String getNgayThue() {
+        return NgayThue;
+    }
+
+    public void setNgayThue(String ngayThue) {
+        NgayThue = ngayThue;
     }
 
     public int getMaTV() {
@@ -50,29 +122,5 @@ public class PhieuMuon {
 
     public void setMaSach(int maSach) {
         MaSach = maSach;
-    }
-
-    public String getNgay() {
-        return Ngay;
-    }
-
-    public void setNgay(String ngay) {
-        Ngay = ngay;
-    }
-
-    public int getTienThue() {
-        return TienThue;
-    }
-
-    public void setTienThue(int tienThue) {
-        TienThue = tienThue;
-    }
-
-    public int getTraSach() {
-        return TraSach;
-    }
-
-    public void setTraSach(int traSach) {
-        TraSach = traSach;
     }
 }

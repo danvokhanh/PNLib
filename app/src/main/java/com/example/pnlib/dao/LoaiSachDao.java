@@ -18,47 +18,56 @@ public class LoaiSachDao {
         dbHelper = new DbHelper(context);
     }
 
-    public ArrayList<LoaiSach> selectAll(){
+    public ArrayList<LoaiSach> getDSLoaiSach(){
         ArrayList<LoaiSach> list = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try{
-            Cursor cursor = db.rawQuery("select * from LoaiSach",null);
-            if(cursor.getCount() > 0){
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()){
-                    LoaiSach ls = new LoaiSach();
-                    ls.setMaLS(cursor.getInt(0));
-                    ls.setTenLS(cursor.getString(1));
-                    list.add(ls);
-                    cursor.moveToNext();
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+        Cursor cursor = db.rawQuery("select * from LoaiSach",null);
+        if(cursor.getCount() != 0){
+            cursor.moveToFirst();
+            do {
+                list.add(new LoaiSach(cursor.getInt(0), cursor.getString(1)));
+            }while (cursor.moveToNext());
         }
         return list;
     }
-    public boolean insert(LoaiSach ls){
+
+    public boolean insert(String tenloai){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("MaLS",ls.getMaLS());
-        values.put("TenLS",ls.getTenLS());
-        long data = db.insert("LoaiSach",null,values);
-        return (data > 0);
+        values.put("HoTen", tenloai);
+        long check = db.insert("LoaiSach",null,values);
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 
-    public boolean update(LoaiSach ls){
+    // xóa loại sách
+    // 1: xóa thành công, 0: xóa thất bại, -1 : có sách tồn tại trong loại đó
+    public int deleteLS(int id){
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery("select * from Sach where MaLoai = ?", new String[]{String.valueOf(id)});
+        if(cursor.getCount() != 0){
+            return -1;
+        }
+        long check = db.delete("LoaiSach","MaLoai = ?", new String[]{String.valueOf(id)});
+        if(check == -1){
+            return 0;
+        }else{
+            return 1;
+        }
+    }
+
+    public boolean update(LoaiSach loaiSach){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("MaLS",ls.getMaLS());
-        values.put("TenLS",ls.getTenLS());
-        long data = db.update("LoaiSach",values,"MaLS = ?",new String[]{String.valueOf(ls.getMaLS())});
-        return (data > 0);
-    }
-
-    public boolean delete(int id){
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long data = db.delete("LoaiSach","MaLS = ?",new String[]{String.valueOf(id)});
-        return (data > 0);
+        values.put("HoTen", loaiSach.getTenLS());
+        long check = db.update("LoaiSach",values,"MaLoai = ?", new String[]{String.valueOf(loaiSach.getMaLS())});
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 }

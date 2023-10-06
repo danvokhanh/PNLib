@@ -18,50 +18,58 @@ public class ThanhVienDao {
         dbHelper = new DbHelper(context);
     }
 
-    public ArrayList<ThanhVien> selectAll(){
+    public ArrayList<ThanhVien> getDSThanhVien(){
         ArrayList<ThanhVien> list = new ArrayList<>();
         SQLiteDatabase db = dbHelper.getReadableDatabase();
-        try{
-            Cursor cursor = db.rawQuery("select * from ThanhVien",null);
-            if(cursor.getCount() > 0){
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()){
-                    ThanhVien tv = new ThanhVien();
-                    tv.setMaTV(cursor.getInt(0));
-                    tv.setHoTen(cursor.getString(1));
-                    tv.setNamSinh(cursor.getString(2));
-                    list.add(tv);
-                    cursor.moveToNext();
-                }
-            }
-        }catch (Exception e){
-            e.printStackTrace();
+        Cursor cursor = db.rawQuery("select * from ThanhVien",null);
+        if(cursor.getCount() != 0){
+            cursor.moveToFirst();
+            do {
+                list.add(new ThanhVien(cursor.getInt(0), cursor.getString(1), cursor.getString(2)));
+            }while (cursor.moveToNext());
         }
         return list;
     }
-    public boolean insert(ThanhVien tv){
+
+    public boolean insert(String hoten, String namsinh){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("MaTV",tv.getMaTV());
-        values.put("HoTen",tv.getHoTen());
-        values.put("NamSinh",tv.getNamSinh());
-        long data = db.insert("ThanhVien",null,values);
-        return (data > 0);
+        values.put("HoTen",hoten);
+        values.put("NamSinh",namsinh);
+        long check = db.insert("ThanhVien",null,values);
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 
-    public boolean update(ThanhVien tv){
+    public boolean update(int matv,String hoten, String namsinh){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put("MaTV",tv.getMaTV());
-        values.put("HoTen",tv.getHoTen());
-        values.put("NamSinh",tv.getNamSinh());
-        long data = db.update("ThanhVien",values,"MaTV = ?",new String[]{String.valueOf(tv.getMaTV())});
-        return (data > 0);
+        values.put("HoTen",hoten);
+        values.put("NamSinh",namsinh);
+        long check = db.update("ThanhVien",values,"MaTV = ?",new String[]{String.valueOf(matv)});
+        if(check == -1){
+            return false;
+        }else{
+            return true;
+        }
     }
 
-    public boolean delete(int id){
+    // int 1: xóa than công ; int 0: thất bại; int -1 : tìm thấy thành viên có phiếu mượn
+    public int delete(int matv){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        long data = db.delete("ThanhVien","MaTV = ?",new String[]{String.valueOf(id)});
-        return (data > 0);
+        Cursor cursor = db.rawQuery("select * from PhieuMuon where MaTV = ?",new String[]{String.valueOf(matv)});
+        if(cursor.getCount() != 0){
+            return  -1;
+        }
+
+        long check = db.delete("ThanhVien","MaTV = ?",new String[]{String.valueOf(matv)});
+        if(check == -1){
+            return 0;
+        }else{
+            return 1;
+        }
     }
 }

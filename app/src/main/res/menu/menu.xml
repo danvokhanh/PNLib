@@ -25,6 +25,7 @@
     <item android:title="Người dùng">
         <menu>
             <item android:id="@+id/menuTND"
+                android:visible="false"
                 android:title="Thêm người dùng"
                 android:icon="@drawable/add_user"/>
             <item android:id="@+id/menuDMK"
